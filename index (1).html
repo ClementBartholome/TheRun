@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New York Knicks — The Run 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:    #006BB6;
+      --orange:  #F58426;
+      --navy:    #0C1220;
+      --navy2:   #16213A;
+      --gold:    #C9A84C;
+      --white:   #F0F0F0;
+      --muted:   #7A8FA8;
+      --fd: 'Playfair Display', Georgia, serif;
+      --fb: 'Inter', system-ui, sans-serif;
+      --fl: 'Bebas Neue', Impact, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--navy); color: var(--white); font-family: var(--fb); overflow-x: hidden; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; min-height: 100svh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 2rem 1.5rem 5rem; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+              radial-gradient(ellipse 90% 60% at 50% 25%, rgba(0,107,182,.3) 0%, transparent 70%),
+              radial-gradient(ellipse 50% 40% at 85% 75%, rgba(245,132,38,.15) 0%, transparent 60%),
+              var(--navy);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(0,107,182,.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,107,182,.07) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+    }
+    .hero-c { position: relative; z-index: 1; }
+    .hero-eyebrow { font-family: var(--fl); font-size: .75rem; letter-spacing: .38em; color: var(--gold); margin-bottom: 1.4rem; }
+    .hero-title { font-family: var(--fd); font-size: clamp(3.2rem,13vw,7rem); font-weight: 900; line-height: .9; }
+    .hero-title em { display: block; color: var(--orange); font-style: italic; font-weight: 700; }
+    .hero-div { width: 56px; height: 2px; background: linear-gradient(90deg, var(--gold), var(--orange)); margin: 1.6rem auto; }
+    .hero-sub { font-size: clamp(.8rem,3vw,.95rem); font-weight: 300; color: var(--muted); letter-spacing: .07em; line-height: 1.7; max-width: 300px; }
+    .hero-badge { margin-top: 2rem; display: inline-flex; align-items: center; gap: .5rem;
+      border: 1px solid rgba(201,168,76,.4); border-radius: 2px; padding: .5rem 1.1rem;
+      font-family: var(--fl); font-size: .75rem; letter-spacing: .2em; color: var(--gold); }
+    .hero-scroll {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      font-family: var(--fl); font-size: .65rem; letter-spacing: .25em; color: var(--muted);
+      animation: bob 2.4s ease-in-out infinite;
+    }
+    @keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(7px)} }
+
+    /* ── STICKY SERIES NAV ── */
+    .snav-wrap { position: sticky; top: 0; z-index: 100; background: rgba(12,18,32,.95); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(201,168,76,.12); }
+    .snav { display: flex; overflow-x: auto; scrollbar-width: none; padding: 0 .5rem; }
+    .snav::-webkit-scrollbar { display: none; }
+    .snav-btn { flex: 0 0 auto; padding: .8rem 1rem; background: none; border: none; cursor: pointer;
+      font-family: var(--fl); font-size: .78rem; letter-spacing: .12em; color: var(--muted);
+      white-space: nowrap; border-bottom: 2px solid transparent; transition: color .2s, border-color .2s;
+      display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .snav-btn small { font-family: var(--fb); font-size: .56rem; font-weight: 400; letter-spacing: .03em; opacity: .6; }
+    .snav-btn.active { color: var(--white); border-bottom-color: var(--gold); }
+
+    /* ── SERIES SECTION ── */
+    .series { padding: 3rem 0 2rem; }
+    .series-head { padding: 0 1.2rem 1.5rem; position: relative; overflow: hidden; }
+    .wm { position: absolute; top: -.5rem; right: .5rem; font-family: var(--fl);
+      font-size: clamp(6rem,28vw,12rem); line-height: 1; color: rgba(255,255,255,.022);
+      user-select: none; pointer-events: none; letter-spacing: -.04em; }
+    .round-lbl { font-family: var(--fl); font-size: .68rem; letter-spacing: .32em; margin-bottom: .5rem; }
+    .series-title { font-family: var(--fd); font-size: clamp(1.6rem,7.5vw,2.6rem); font-weight: 700; line-height: 1.05; margin-bottom: .45rem; }
+    .series-result { font-family: var(--fl); font-size: .95rem; letter-spacing: .1em; opacity: .65; }
+    .series-line { height: 1px; margin: 0 1.2rem 1.8rem; }
+
+    /* ── GAME TABS ── */
+    .games-nav { display: flex; overflow-x: auto; scrollbar-width: none; padding: 0 1.2rem; gap: .5rem; margin-bottom: 1.5rem; }
+    .games-nav::-webkit-scrollbar { display: none; }
+    .game-tab { flex: 0 0 auto; padding: .45rem .85rem; border-radius: 2px; border: 1px solid rgba(255,255,255,.1);
+      background: none; cursor: pointer; font-family: var(--fl); font-size: .72rem; letter-spacing: .12em;
+      color: var(--muted); transition: all .2s; white-space: nowrap; }
+    .game-tab.active { color: var(--white); }
+
+    /* ── GAME PANEL ── */
+    .game-panel { padding: 0 1.2rem; }
+    .game-header { margin-bottom: 1.2rem; }
+    .game-score { font-family: var(--fl); font-size: clamp(1.4rem,6vw,2rem); letter-spacing: .06em; color: var(--white); }
+    .game-date { font-family: var(--fb); font-size: .68rem; color: var(--muted); font-weight: 300; margin-top: .2rem; }
+    .game-summary { font-family: var(--fb); font-size: .83rem; line-height: 1.65; color: rgba(240,240,240,.75); margin-top: .6rem; border-left: 2px solid; padding-left: .9rem; }
+
+    /* ── PHOTO GRID ── */
+    .photo-grid { display: flex; flex-direction: column; gap: .85rem; margin-top: 1.2rem; }
+
+    .photo-card {
+      position: relative; border-radius: 3px; overflow: hidden;
+      background: var(--navy2); cursor: pointer;
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+    .photo-card:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,.5); }
+
+    /* Le format standard reste 3/2 */
+    .photo-slot {
+      width: 100%; aspect-ratio: 3/2; position: relative; overflow: hidden;
+    }
+
+    /* Ratio vertical pour le mode portrait */
+    .photo-card.portrait .photo-slot {
+      aspect-ratio: 3/4;
+    }
+
+    .photo-slot img {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      display: block; transition: transform .5s ease, opacity .35s;
+      opacity: 0;
+    }
+    .photo-slot img.ok { opacity: 1; }
+    .photo-card:hover .photo-slot img { transform: scale(1.04); }
+    .photo-placeholder {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: .5rem;
+    }
+    .ph-icon { font-size: 2rem; opacity: .25; }
+    .ph-text { font-family: var(--fl); font-size: .65rem; letter-spacing: .18em; opacity: .2; }
+    .photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(12,18,32,.96) 0%, rgba(12,18,32,.45) 45%, transparent 100%);
+      pointer-events: none;
+    }
+    .photo-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem .9rem .9rem; }
+    .photo-tag { display: inline-block; font-family: var(--fl); font-size: .6rem; letter-spacing: .2em;
+      padding: 2px 6px; border-radius: 2px; margin-bottom: .35rem; }
+    .photo-legend { font-family: var(--fb); font-size: .8rem; font-weight: 400; line-height: 1.5; color: var(--white); }
+
+    @media (min-width: 600px) {
+      .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; align-items: start; }
+      .photo-card.wide { grid-column: 1 / -1; }
+      .photo-card.wide .photo-slot { aspect-ratio: 16/8; }
+      .photo-card.portrait { grid-row: span 2; }
+    }
+
+    /* ── LIGHTBOX ── */
+    .lb { position: fixed; inset: 0; z-index: 200; background: rgba(8,12,22,.97); backdrop-filter: blur(6px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; cursor: pointer; touch-action: none; }
+    .lb-close { position: absolute; top: 1rem; right: 1rem; font-family: var(--fl); font-size: .7rem;
+      letter-spacing: .2em; color: var(--muted); background: none; border: none; cursor: pointer; padding: .6rem; display: flex; align-items: center; gap: .3rem; z-index: 202; }
+
+    /* Navigation flèches Lightbox */
+    .lb-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(12,18,32,.5); color: var(--white); border: none;
+      font-size: 1.2rem; width: 3rem; height: 3rem; display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; cursor: pointer; transition: background .2s; z-index: 201;
+      backdrop-filter: blur(4px);
+    }
+    .lb-nav:hover { background: var(--orange); }
+    .lb-nav:disabled { opacity: 0; pointer-events: none; }
+    .lb-prev { left: 1.5rem; }
+    .lb-next { right: 1.5rem; }
+
+    .lb-img-wrap {
+      width: auto; max-width: 90vw; height: auto; max-height: 75svh;
+      position: relative; border-radius: 3px; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.7); cursor: default;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .lb-img-wrap img {
+      width: auto; height: auto; max-width: 100%; max-height: 75svh;
+      object-fit: contain;
+      opacity: 0; transition: opacity .3s;
+    }
+    .lb-img-wrap img.ok { opacity: 1; }
+    .lb-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3rem; opacity: .15; }
+    .lb-caption { margin-top: 1.2rem; text-align: center; max-width: 560px; cursor: default; }
+    .lb-legend { font-family: var(--fd); font-size: 1rem; font-style: italic; color: var(--white); line-height: 1.55; }
+
+    /* ── FOOTER ── */
+    .footer { padding: 3.5rem 1.5rem; text-align: center; border-top: 1px solid rgba(201,168,76,.12); }
+    .footer-logo { font-family: var(--fd); font-size: 1.5rem; font-weight: 900; }
+    .footer-logo em { color: var(--orange); font-style: italic; }
+    .footer-sub { margin-top: .7rem; font-family: var(--fl); font-size: .65rem; letter-spacing: .32em; color: var(--muted); }
+    .footer-note { margin-top: 1rem; font-size: .62rem; color: rgba(122,143,168,.5); line-height: 1.6; max-width: 480px; margin-inline: auto; }
+
+    .fade-enter-active,.fade-leave-active{transition:opacity .2s}
+    .fade-enter-from,.fade-leave-to{opacity:0}
+
+    @media (max-width: 600px) {
+      .lb-nav { display: none; } /* On masque les flèches sur mobile (le tactile suffit) */
+    }
+    @media (min-width: 480px) {
+      .series-head,.game-panel,.series-line,.games-nav { padding-left: 1.5rem; padding-right: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <header class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-c">
+      <p class="hero-eyebrow">New York Knicks · NBA Playoffs 2026</p>
+      <h1 class="hero-title">The <em>Run.</em></h1>
+      <div class="hero-div" aria-hidden="true"></div>
+      <p class="hero-sub">Quatre séries. Seize victoires. Cinquante-trois ans d'attente. Enfin.</p>
+      <div class="hero-badge">🏆 NBA Champions 2026</div>
+    </div>
+    <div class="hero-scroll" aria-hidden="true">
+      <svg width="14" height="20" viewBox="0 0 14 20" fill="none">
+        <rect x="5.5" y=".5" width="3" height="11" rx="1.5" fill="white" opacity=".5"/>
+        <path d="M2 12L7 18L12 12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/>
+      </svg>
+      EXPLORER
+    </div>
+  </header>
+
+  <nav class="snav-wrap" aria-label="Séries">
+    <div class="snav" role="tablist">
+      <button v-for="s in SERIES" :key="s.id" class="snav-btn" :class="{active: activeSeriesId===s.id}"
+              role="tab" :aria-selected="activeSeriesId===s.id" @click="goToSeries(s.id)">
+        {{ s.opponent }}
+        <small>{{ s.roundShort }}</small>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <section v-for="s in SERIES" :key="s.id" :id="'s-'+s.id" class="series">
+
+      <div class="series-head">
+        <div class="wm" aria-hidden="true">{{ s.wm }}</div>
+        <p class="round-lbl" :style="{color: s.accent}">{{ s.round }}</p>
+        <h2 class="series-title">Knicks <span :style="{color: s.accent}">vs.</span> {{ s.opponent }}</h2>
+        <p class="series-result">{{ s.result }}</p>
+      </div>
+      <div class="series-line" :style="{background:`linear-gradient(90deg,${s.accent}88,transparent)`}"></div>
+
+      <div class="games-nav" role="tablist" :aria-label="`Games vs ${s.opponent}`">
+        <button v-for="g in s.games" :key="g.num"
+                class="game-tab"
+                :class="{active: activeGame[s.id]===g.num}"
+                :style="activeGame[s.id]===g.num ? {background: s.accent+'22', borderColor: s.accent+'88', color: s.accent} : {}"
+                role="tab"
+                :aria-selected="activeGame[s.id]===g.num"
+                @click="setGame(s.id, g.num)">
+          GAME {{ g.num }}
+          <span v-if="g.won" style="margin-left:.3rem">✓</span>
+        </button>
+      </div>
+
+      <div v-for="g in s.games" :key="g.num" v-show="activeGame[s.id]===g.num" class="game-panel">
+        <div class="game-header">
+          <div class="game-score">{{ g.score }}</div>
+          <div class="game-date">{{ g.date }}</div>
+          <p class="game-summary" :style="{borderColor: s.accent}">{{ g.summary }}</p>
+        </div>
+        <div class="photo-grid">
+          <div v-for="(p,i) in g.photos" :key="p.id"
+               class="photo-card" :class="{wide: i===0 && !p.portrait, portrait: p.portrait}"
+               role="button" tabindex="0"
+               :aria-label="p.legend"
+               @click="openLb(p, s, g)"
+               @keydown.enter="openLb(p, s, g)"
+               @keydown.space.prevent="openLb(p, s, g)">
+            <div class="photo-slot">
+              <div class="photo-placeholder" :style="{background: p.bg || s.bg}">
+                <span class="ph-icon" v-if="!p.src">📷</span>
+                <span class="ph-text" v-if="!p.src">PHOTO</span>
+              </div>
+              <img v-if="p.src" :src="p.src" :alt="p.legend" loading="lazy" draggable="false"
+                   @load="e=>e.target.classList.add('ok')" />
+              <div class="photo-overlay" aria-hidden="true"></div>
+            </div>
+            <div class="photo-caption" v-if="p.legend || p.tag">
+              <span class="photo-tag" v-if="p.tag" :style="{background:s.accent+'22', color:s.accent, border:`1px solid ${s.accent}44`}">{{ p.tag }}</span>
+              <p class="photo-legend" v-if="p.legend">{{ p.legend }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-logo">New York <em>Knicks</em></div>
+    <p class="footer-sub">NBA Champions · 2026 · 16–3 en Playoffs</p>
+    <p class="footer-note">Les photos sont à titre indicatif.<br>Sources : Getty Images / NBAE, AP Photo, Imagn Images.</p>
+  </footer>
+
+  <transition name="fade">
+    <div v-if="lb.open" class="lb" role="dialog" aria-modal="true"
+         @click="closeLb()"
+         @touchstart="onTouchStart"
+         @touchend="onTouchEnd">
+
+      <button class="lb-close" @click.stop="closeLb()">✕ FERMER</button>
+
+      <button class="lb-nav lb-prev" :disabled="!hasPrev" @click.stop="prevPhoto" aria-label="Photo précédente">❮</button>
+      <button class="lb-nav lb-next" :disabled="!hasNext" @click.stop="nextPhoto" aria-label="Photo suivante">❯</button>
+
+      <div v-if="lb.photo" class="lb-img-wrap" @click.stop>
+        <img :key="lb.photo.id" v-if="lb.photo.src" :src="lb.photo.src" :alt="lb.photo.legend" @load="e=>e.target.classList.add('ok')" />
+      </div>
+
+      <div v-if="lb.photo && (lb.photo.legend || lb.photo.tag)" class="lb-caption" @click.stop>
+        <span class="photo-tag" v-if="lb.photo.tag" :style="{display:'inline-block',padding:'2px 8px',borderRadius:'2px',fontFamily:'var(--fl)',fontSize:'.65rem',letterSpacing:'.2em',marginBottom:'.7rem',background:lb.series?.accent+'22',color:lb.series?.accent,border:`1px solid ${lb.series?.accent}44`}">{{ lb.photo.tag }}</span>
+        <p class="lb-legend" v-if="lb.photo.legend">{{ lb.photo.legend }}</p>
+      </div>
+    </div>
+  </transition>
+
+</div>
+
+<script>
+  const { createApp, ref, reactive, computed, onMounted, onUnmounted } = Vue;
+
+  const AUTO_FILES = {
+    "Cavs_Game1": [
+      { src: "07-6.webp", portrait: true, tag: "GAME 1 · MSG", legend: "Le Garden accueille les Finales de Conférence. Les Cavs arrivent épuisés, à peine 48h après leur Game 7 contre Detroit." },
+      { src: "08-6.jpeg", tag: "DÉFENSE", legend: "OG Anunoby colle Donovan Mitchell toute la soirée. Mitchell finira à 29 pts mais ne pourra rien changer à l'issue du match." },
+      { src: "11-5.jpeg", portrait: true, tag: "INTENSITÉ", legend: "Mitchell Robinson ciblé intentionnellement aux lancers par Cleveland. Il rentrera 2/8 depuis la ligne, mais le plan ne suffira pas." },
+      { src: "18-3.webp", tag: "Q3", legend: "Les Cavs mènent 93-71 à 7:52 du buzzer. Ce qui suit entrera dans la légende du Garden." },
+      { src: "24-3.jpeg", tag: "HUSTLE", legend: "Hart, pas dans la rotation en fin de match, ronge son frein sur le banc pendant le comeback de sa vie." },
+      { src: "29-2.webp", tag: "COMEBACK", legend: "New York enclenche un 44-11 sur les 7 dernières minutes + la prolongation. Le Garden entre en fusion." },
+      { src: "32-2.jpeg", tag: "MONEY TIME", legend: "Brunson cible impitoyablement James Harden en isolation. 6 fautes provoquées, 6 balles perdues pour Harden en fin de match." },
+      { src: "33-2.webp", portrait: true, tag: "CLUTCH", legend: "Layup de Brunson à 19 secondes pour égaliser à 101 partout. Direction les prolongations." },
+      { src: "36.webp", tag: "OVERTIME", legend: "En OT, les Knicks ouvrent sur 9-0 sans laisser souffler Cleveland. Le match ne fait plus de doute." },
+      { src: "37.jpeg", tag: "GAME 1 · FINAL", legend: "115-104 après prolongation. Le plus grand comeback de l'histoire des Knicks en playoffs. Brunson : 38 pts, 6 ast, 5 reb, 3 stl." }
+    ],
+    "Cavs_Game2": [
+      { src: "08-7.jpeg", tag: "ZONE DÉFENSIVE", legend: "Leçon retenue du Game 1 : les Knicks verrouillent Cleveland dès le premier quart et ne les lâcheront plus." },
+      { src: "10-6.webp", portrait: true, tag: "DOMINATION", legend: "KAT s'impose en patron : 18 pts, 13 rebonds et une présence qui étouffe la raquette des Cavs toute la soirée." },
+      { src: "20-4.webp", tag: "DOUBLE MENACE", legend: "Towns punit à 3 pts comme sous le panier. Cleveland n'a aucune réponse au casse-tête que représente KAT." },
+      { src: "22-4.jpeg", portrait: true, tag: "DOUBLE-DOUBLE", legend: "Hart, fantôme du Game 1, répond présent avec 26 pts — record en carrière playoffs — et une série de 3 pts clés sur stratégie délibérée de Cleveland de le laisser ouvert." },
+      { src: "23-4.jpeg", tag: "VERROU", legend: "Brunson délivre 19 pts et surtout 14 passes décisives, son record en carrière playoffs. Le collectif tourne à plein régime." },
+      { src: "25-4.webp", tag: "TRANSITION", legend: "Run de 18-0 au 3e quart, le coup de grâce. Le Garden chante 'Knicks in four !' dans les dernières secondes." },
+      { src: "26-4.webp", tag: "STEAL", legend: "Cleveland résiste en début de match mais les Knicks éteignent la lumière au retour des vestiaires." },
+      { src: "34-2.jpeg", tag: "GAME 2 · FINAL", legend: "109-93, victoire nette. Brunson MVP de la série avec 25.5 pts et 7.8 ast de moyenne. Direction Cleveland pour le Game 3." }
+    ],
+    "Cavs_Game3": [
+      { src: "JAN00074.avif", tag: "GAME 3 · ROAD", legend: "Le Rocket Mortgage FieldHouse attend les Knicks de pied ferme. Taylor Swift et Travis Kelce dans les tribunes pour soutenir Cleveland." },
+      { src: "JAN00423.webp", portrait: true, tag: "REBOND", legend: "Brunson ne marque que 2 pts en première mi-temps mais prépare les munitions pour la deuxième." },
+      { src: "JAN00635.avif", tag: "ÉNERGIE", legend: "OG Anunoby signe 21 pts sur 55.8% au tir, les Knicks font la course en tête du début à la fin." },
+      { src: "JAN01205.avif", tag: "RUN", legend: "Mikal Bridges ajoute 22 pts, son meilleur total des ECF. New York ne donne jamais l'avantage à Cleveland." },
+      { src: "JAN01252.webp", portrait: true, tag: "DAGGER", legend: "Brunson prend feu en 2e mi-temps avec 28 pts au total. Les Cavs de Donovan Mitchell (23 pts) ne peuvent rien y faire." },
+      { src: "JAN01322.jpg", tag: "MAESTRO", legend: "Les Knicks tirent à 55.8% du champ, rentrent 11 tirs à 3 pts et sont 24/27 aux lancers. Une démonstration d'efficacité." },
+      { src: "JAN01412.webp", portrait: true, tag: "POSTE BAS", legend: "Evan Mobley bats 24 pts pour Cleveland mais les Cavs tirent à 29.3% derrière l'arc. Trop peu." },
+      { src: "JAN01592.webp", tag: "BANC", legend: "Le banc sait : les Knicks sont à une victoire des Finales NBA pour la première fois depuis 1999." },
+      { src: "JAN09875.avif", tag: "GAME 3 · FINAL", legend: "121-108. Dixième victoire consécutive. Le Garden sera le théâtre de la qualification dès lundi soir." }
+    ],
+    "Cavs_Game4": [
+      { src: "260525-POSTGAME-04833.avif", tag: "GAME 4 · START", legend: "Donovan Mitchell ouvre les hostilités avec 8 pts de suite. Cleveland mène 8-2. Mais les Knicks ont réponse à tout." },
+      { src: "ecf-6.avif", tag: "COLLECTIF", legend: "KAT : 19 pts, 14 reb. Bridges et Brunson : 15 pts chacun. Shamet : 16 pts depuis le banc. Tout le monde contribue." },
+      { src: "GettyImages-2278219196.webp", portrait: true, tag: "POSTER", legend: "New York distance Cleveland de 37 points. Le margin de victoire moyen sur la série : 23.7 pts. Une hégémonie absolue." },
+      { src: "GettyImages-2278219206.avif", tag: "PRESSION", legend: "Les Cavs sont tenus à seulement 93 points, écrasés sous la pression défensive des Knicks." },
+      { src: "GettyImages-2278221247.avif", tag: "BLOWOUT", legend: "Cleveland balayé en playoffs pour la première fois depuis les Finals 2018 contre Golden State. L'histoire se répète." },
+      { src: "GettyImages-2278221323.avif", portrait: true, tag: "REPOS", legend: "Brunson nommé MVP de la série. 'The word hope has been gone from this franchise for a long time', dit Towns, la voix brisée." },
+      { src: "JAN03532.webp", tag: "SWEEP", legend: "130-93. Sweep. Les Knicks deviennent la 4e équipe de l'histoire à aligner 11 victoires consécutives en playoffs." },
+      { src: "JAN03788.webp", portrait: true, tag: "MVP ECF", legend: "Jalen Brunson soulève le trophée Bob Cousy. 25.5 pts et 7.8 ast de moyenne sur la série face aux Cavs." },
+      { src: "JAN04230.webp", tag: "FOCUS", legend: "Première Finale NBA pour les Knicks depuis 1999. L'adversaire : les San Antonio Spurs. Le remake de 1999." },
+      { src: "JAN04372.webp", tag: "CÉLÉBRATION", legend: "Le différentiel de points des Knicks sur leurs 12 premiers matchs de playoffs : +221. Le meilleur de l'histoire de la NBA." }
+    ],
+    "Hawks_Game1": [
+      { src: "15-6.jpeg", tag: "GAME 1 · MSG", legend: "Nouveau coach, même ambition. Première année de Mike Brown sur le banc des Knicks, premier match de playoffs." },
+      { src: "16-6.jpeg", portrait: true, tag: "PÉNÉTRATION", legend: "Brunson sort du premier quart avec 22 de ses 28 pts. 6/6 au tir. Le Garden rugit à chaque panier." },
+      { src: "20a.jpeg", tag: "RYTHME", legend: "KAT insaisissable : 25 pts au total, dont 19 en deuxième mi-temps." },
+      { src: "22-2.jpeg", tag: "RÉSISTANCE", legend: "Jalen Johnson (23 pts) et CJ McCollum (26 pts) tentent de garder Atlanta dans le match, en vain." },
+      { src: "27-1.jpeg", portrait: true, tag: "HUSTLE", legend: "Josh Hart pose les bases avec 11 pts et 14 rebonds. Le poumon de cette équipe en toutes circonstances." },
+      { src: "28.webp", tag: "DÉTERMINATION", legend: "Les Hawks terminent sur un 11-0 pour réduire l'écart à 106-98, mais il est trop tard pour les Knicks." },
+      { src: "33.jpeg", tag: "GAME 1 · FINAL", legend: "113-102. Brunson prévient : 'We know they'll be ready for Game 2. Quick turnaround and extreme focus.'" }
+    ],
+    "Hawks_Game2": [
+      { src: "gm2-20.webp", portrait: true, tag: "GAME 2", legend: "Les Knicks mènent 12 pts au retour des vestiaires. En playoffs depuis 1954, ils n'avaient perdu qu'une seule fois dans ce cas de figure." },
+      { src: "gm2-22.webp", tag: "ADVERSITÉ", legend: "KAT marque 14 pts dans le 3e quart pour pousser l'avance à 78-64. L'affaire semble pliée." },
+      { src: "gm2-27.webp", tag: "LUTTE", legend: "CJ McCollum, acquis de Washington en janvier, donne une première pour à 101-100 avec 2:09 à jouer. Premier avantage ATL en 2e mi-temps." },
+      { src: "gm2-3.webp", portrait: true, tag: "TOURNANT", legend: "Brunson tente d'égaliser à 3 pts, McCollum répond immédiatement à 105-103. Il reste 33 secondes. Bridges tire en buzzer… manqué." },
+      { src: "gm2watchparty.jpg", tag: "GAME 2 · FINAL", legend: "107-106 Atlanta. Hold-up à domicile. McCollum : 32 pts. 'This is a game we should have won', lâche Hart, amer." }
+    ],
+    "Hawks_Game3": [
+      { src: "18-6.webp", tag: "GAME 3 · AWAY", legend: "La State Farm Arena en fusion. Les Hawks, revenus de 12 pts en retard au Game 2, croient au miracle." },
+      { src: "19-5.webp", portrait: true, tag: "SHOOTER", legend: "CJ McCollum frappe encore : fadeaway à 12.5 secondes de la fin pour une victoire 109-108. Deux meurtrières dos à dos." },
+      { src: "24-3.jpeg", tag: "GAME 3 · FINAL", legend: "Atlanta prend l'avantage 2-1. Brunson (29 pts) n'a pas pu stopper la saignée. Les Knicks sont dos au mur." }
+    ],
+    "Hawks_Game4": [
+      { src: "16-8.jpeg", portrait: true, tag: "GAME 4", legend: "KAT répond à l'appel : 18 pts, 11 reb, 6 ast — son premier triple-double en playoffs. Le patron se lève." },
+      { src: "19-6.jpeg", tag: "TRIPLE-DOUBLE", legend: "OG Anunoby ajoute 22 pts sur 7/8 au tir. Les Knicks tiennent Atlanta à 41% au global et 24% à 3 pts." },
+      { src: "24-4.webp", tag: "LOCKDOWN", legend: "Les Hawks ne marquent que 44 pts à la mi-temps, 65 après 3 quarts. L'étau défensif est implacable." },
+      { src: "34-1.jpeg", tag: "GAME 4 · FINAL", legend: "114-98. 'We put ourselves in this position', dit Hart. 'We were ready to answer back.' Égalité 2-2." }
+    ],
+    "Hawks_Game5": [
+      { src: "11-10.avif", tag: "GAME 5 · MSG", legend: "De retour à la maison, Brunson éteint Atlanta dès le départ. Les Knicks mènent 64-48 à la mi-temps à 58.5% au tir." },
+      { src: "12-9.avif", portrait: true, tag: "TAKEOVER", legend: "39 pts pour Brunson — son nouveau record en playoffs — avec un run personnel de 8 pts qui fait passer les Knicks à +22 au 3e quart." },
+      { src: "35-2.webp", tag: "DÉFENSE", legend: "Trae Young muselé, Atlanta est contrôlé tout au long de la soirée. Plus aucun des 'one-point wins' du début de série." },
+      { src: "37-1.avif", tag: "SOUTIEN", legend: "OG Anunoby (17 pts, 10 reb) et KAT (16 pts, 14 reb, 6 ast) entourent parfaitement Brunson pour la victoire." },
+      { src: "40-1.jpeg", tag: "GAME 5 · FINAL", legend: "126-97. Les Knicks reprennent l'avantage 3-2 et rentrent à Atlanta avec une balle de match." }
+    ],
+    "Hawks_Game6": [
+      { src: "12-10.webp", tag: "GAME 6 · START", legend: "New York sort des vestiaires en trombe : record NBA du margin à la mi-temps, +47 pts pour les Knicks à la pause." },
+      { src: "14-12.webp", portrait: true, tag: "FESTIVAL", legend: "Les Knicks insèrent 18 tirs à 3 pts en première mi-temps à eux seuls, pour 54 pts derrière l'arc, presque autant que les 57 pts totaux d'Atlanta." },
+      { src: "18-9.webp", tag: "RECORD", legend: "Record NBA du differential à la mi-temps : +51 points d'écart. L'histoire de la NBA s'écrit sous nos yeux ce soir à Atlanta." },
+      { src: "20-8.jpeg", tag: "TENSION", legend: "La frustration d'Atlanta explose sur le terrain. Les esprits s'échauffent, les fautes s'accumulent." },
+      { src: "25-5.jpeg", portrait: true, tag: "EJECTION", legend: "Dyson Daniels et Mitchell Robinson exclus après une altercation. Deux équipes aux antipodes au tableau d'affichage." },
+      { src: "26-5.webp", tag: "DOMINATION", legend: "Avec ou sans Robinson, les Knicks n'ont jamais relâché la pression. La démonstration est totale et sans appel." },
+      { src: "27-5.webp", tag: "GAME 6 · FINAL", legend: "140-89. Victoire par 51 pts — record de franchise. Les Knicks en demi-finale de conf' avec 11 victoires en série à venir." }
+    ],
+    "Philly_Game1": [
+      { src: "02-1.webp", portrait: true, tag: "GAME 1 · MSG", legend: "Embiid absent, touché à la hanche et à la cheville droite. Les 76ers arrivent diminués face à des Knicks en feu." },
+      { src: "11-1.webp", tag: "SNIPER", legend: "Brunson en feu : 35 pts sur 12/18 au tir. Anunoby à 18 pts sur 7/8. Bridges à 17 pts sur 7/10. Efficacité absolue." },
+      { src: "18.jpeg", tag: "DÉFENSE", legend: "New York tire à 63.1% du champ et réalise 51.4% à 3 pts (19/37). L'une des performances offensives les plus abouties de l'histoire des playoffs." },
+      { src: "20.jpeg", portrait: true, tag: "RÉPONSE", legend: "KAT domine dans la raquette : 17 pts sur 7/11. Les Knicks établissent un avantage de 58-32 en points dans la peinture." },
+      { src: "26.jpeg", tag: "ROULEAU COMPRESSEUR", legend: "New York est devenu la première équipe à remporter 3 matches de playoffs consécutifs par 25+ pts d'écart." },
+      { src: "33.png", tag: "GAME 1 · FINAL", legend: "137-98. +39 au final. Tyrese Maxey (26 pts) est le seul Sixer à surnager dans un naufrage collectif." }
+    ],
+    "Philly_Game2": [
+      { src: "09-3.jpeg", tag: "GAME 2", legend: "Embiid toujours absent. Philly durcit le ton en défense et impose un rythme haché. Le match compte 25 changements de leader." },
+      { src: "12-3.jpeg", portrait: true, tag: "TACTIQUE", legend: "George (19 pts) et Oubre (19 pts) portent Philly sans Embiid. La recette fonctionne mieux qu'en Game 1 mais reste insuffisante." },
+      { src: "15-2.jpeg", tag: "FAUTES", legend: "Brunson provoque 7 fautes dans le seul dernier quart-temps. Un masterclass de QI basketball, les Sixers ne peuvent pas l'arrêter légalement." },
+      { src: "18-1.avif", portrait: true, tag: "CORNER 3", legend: "Anunoby : 24 pts mais quitte le match sur blessure. Ça inquiète pour la suite de la campagne." },
+      { src: "19-1.avif", tag: "SURVIE", legend: "Philly tient dans les premiers quarts, faisant état des 25 égalisations et 25 changements de lead — du jamais-vu en 11 ans en playoffs." },
+      { src: "20-1.jpeg", tag: "GRINTA", legend: "Hart arrache chaque rebond comme si sa vie en dépendait. Son activité sans ballon est précieuse dans ce match serré." },
+      { src: "21-1.jpeg", portrait: true, tag: "GLACE", legend: "Brunson tite le panier qui fait 103-99 à 3:45 du buzzer, puis Bridges enfonce le clou : 6 pts d'avance, match plié." },
+      { src: "24-1.jpeg", tag: "STOP", legend: "La défense des Knicks résiste sur la dernière possession des Sixers. KAT : 'It's just us being very locked in to the moment.'" },
+      { src: "26-1.jpeg", tag: "GAME 2 · FINAL", legend: "108-102. 2-0 avant d'aller à Philadelphie. Knicks : 19.4 pts de victoire en moyenne sur leurs deux rondes, record depuis 1984." }
+    ],
+    "Philly_Game3": [
+      { src: "07.jpg", tag: "GAME 3 · AWAY", legend: "Wells Fargo Center électrique. Embiid toujours forfait. Philly jouait sans son pivot depuis l'appendicite de fin de saison régulière." },
+      { src: "08.jpg", portrait: true, tag: "POSTER BLOCK", legend: "Les Knicks amputés d'Anunoby, remplacé par Deuce McBride en sortie de banc. Philly espère profiter de l'absence d'OG." },
+      { src: "27.avif", tag: "BIS REPETITA", legend: "Maxey (26 pts en G1, 26 pts ici) est encore le plus sérieux adversaire des Knicks sur cette série. Mais insuffisant." },
+      { src: "29.avif", tag: "VERROU", legend: "Philly tire à 28% à 3 pts sur la série. La défense new-yorkaise verrouille toutes les lignes de passe extérieure." },
+      { src: "32.avif", portrait: true, tag: "STAT", legend: "Brunson dicte les opérations : panier go-ahead à 5:06 puis jumper pour +4. Les Knicks contrôlent les dernières minutes." },
+      { src: "34.jpg", tag: "GESTION", legend: "Bridges prend feu depuis le corner. Les Knicks sortent des trois matchs à Philadelphie avec l'avantage dans chacun d'eux." },
+      { src: "36.jpg", tag: "GAME 3 · FINAL", legend: "Victoire en maintenant Philly sous les 100 pts pour la 2e fois. Un seul match encore et le sweep est possible." }
+    ],
+    "Philly_Game4": [
+      { src: "17-2.webp", tag: "GAME 4 · START", legend: "McBride titulaire à la place d'Anunoby blessé. Il rentre 4/4 à 3 pts dans le seul premier quart — du jamais-vu par un Knick depuis 1997." },
+      { src: "23-2.avif", portrait: true, tag: "RECORD FRANCHISE", legend: "25 tirs à 3 pts rentrés, record NBA en playoffs. 11 tirs à 3 pts convertis au premier quart seul, égalant le record de ligue pour un quart." },
+      { src: "25-2.avif", tag: "REPOS", legend: "144-114. Sweep. Le meilleur margin de victoire sur deux rondes depuis que les playoffs comptent 16 équipes (1984)." },
+      { src: "31-1.jpeg", tag: "SWEEP", legend: "Retour en Finales de Conf' pour la 2e saison consécutive. Premier sweep des Knicks depuis les demi-finales Est 1999 contre Atlanta." }
+    ],
+    "Spurs_Game1": [
+      { src: "01.jpeg", portrait: true, tag: "FINALES NBA", legend: "27 ans d'attente. Le remake des Finales 1999. Cette fois, les Knicks veulent une autre fin." },
+      { src: "05-1.webp", tag: "REMATCH", legend: "Game 1 au Frost Bank Center. Wembanyama : 26 pts, 12 reb mais 6 balles perdues et 6/21 au tir. Knicks volent le Game 1." },
+      { src: "06-1.jpeg", tag: "L'ALIEN", legend: "Wembanyama impressionne mais Brunson refuse de le laisser prendre le dessus sur les possessions clés." },
+      { src: "06.webp", portrait: true, tag: "AGRESSIVITÉ", legend: "Brunson : 30 pts sur 12/31 au tir, peu efficace mais décisif : un 3 pts et un jumper dans les 2 dernières minutes font la différence." },
+      { src: "08-1.webp", tag: "DÉFENSE", legend: "Les Knicks, meilleure défense des playoffs, étouffent San Antonio : 95 pts seulement malgré un parquet hostile." },
+      { src: "09-1.webp", tag: "STAT", legend: "Wembanyama tourne la balle 6 fois — le signal que New York a trouvé comment le perturber en début de série." },
+      { src: "10-1.webp", portrait: true, tag: "CUT", legend: "KAT : 18 pts, 12 reb. Double-double de référence pour contrer la présence de Wemby dans la raquette." },
+      { src: "11-1.webp", tag: "SPACING", legend: "Les Spurs sont menés à domicile. Il ne s'est pas passé la même chose en 1999. Les Knicks envoient un message fort." },
+      { src: "14-1.webp", tag: "TRANCHÉES", legend: "Game 1 : chaque possession disputée à la sueur. L'intensité des Finales est bien là dès l'ouverture de la série." },
+      { src: "16-1.webp", portrait: true, tag: "COLLECTIF", legend: "Shamet contribue depuis le banc, Towns domine KAT. Tout le collectif tire dans le même sens." },
+      { src: "16a.jpeg", tag: "IMPACT", legend: "16.93 millions de téléspectateurs aux États-Unis pour ce Game 1, en hausse de 90% par rapport au Game 1 des Finals de l'an dernier." },
+      { src: "17-1.avif", tag: "MID-RANGE", legend: "Brunson tire son jumper pull-up en fin de possession : son arme préférée contre les longues défenses de Wembanyama." },
+      { src: "20260603_SAS_RT_NBAFinals_GameOne_NYK_154.webp", portrait: true, tag: "EXPERIENCE", legend: "Les Knicks volent le Game 1 à l'extérieur pour la 3e fois de ces playoffs. À chaque fois, ils ne l'ont plus lâché." },
+      { src: "26.webp", tag: "VERROU", legend: "San Antonio ne trouve plus d'angles ouverts en fin de match. 95 points concédés, les Knicks tiennent leur plan défensif." },
+      { src: "28.webp", tag: "HUSTLE", legend: "Les Knicks ont remporté 12 matchs de suite en playoffs. Record absolu depuis les Spurs 1999, qui avaient… remporté le titre." },
+      { src: "29.webp", tag: "GAME 1 · FINAL", legend: "105-95. Premier coup frappé à San Antonio. Les Knicks n'ont encore jamais perdu une série qu'ils ont ouverte par un succès." }
+    ],
+    "Spurs_Game2": [
+      { src: "05-2.jpeg", tag: "GAME 2", legend: "Les Spurs mènent 34-25 après le premier quart. Mais les Knicks inversent la vapeur et mènent 56-52 à la mi-temps." },
+      { src: "09a.webp", portrait: true, tag: "DUEL INTÉRIEUR", legend: "Wembanyama : 29 pts, 11/21 au tir. Mais une faute décisive avec le score à égalité à 10 secondes du buzzer." },
+      { src: "10-2.jpeg", tag: "HIGHLIGHT", legend: "KAT répond à Wemby avec 21 pts et 13 reb sur 8/12 au tir. Contre la tour de 7'4, Towns ne bronche pas." },
+      { src: "14-1.webp", tag: "FOOTWORK", legend: "Brunson : 20 pts seulement, 7/25 au tir, mais 5 stls et la passe décisive de l'égalisation dans le money time." },
+      { src: "15-2.webp", portrait: true, tag: "CHASSÉ-CROISÉ", legend: "Wembanyama commet un turnover crucial à 10 secondes de la fin, score égal. Une erreur qui pourrait hanter toute une carrière." },
+      { src: "16-2.avif", tag: "INTENSITÉ", legend: "Wemby tente un jumper à 20 pieds sur le buzzer pour arracher l'égalisation. Le tir ne rentre pas. Knicks 2-0." },
+      { src: "16a.jpeg", tag: "COACHING", legend: "'He's made that shot a thousand times,' dit Castle. Le Frost Bank Center en état de choc." },
+      { src: "21-2.avif", portrait: true, tag: "DAGGER", legend: "Les Knicks rejouent au scénario de leurs 4 victoires sur la série : remontée depuis un déficit à deux chiffres." },
+      { src: "24-1.jpeg", tag: "MONEY TIME", legend: "Brunson convertit un lancer-franc pour le 105-104 après l'équilibre rétabli. Dernier plongeon de Wemby : raté." },
+      { src: "28-1.jpeg", tag: "SUSPENSE", legend: "Ce Game 2 rejoint les annales : les Finales 2026 deviendront la seule série où chaque game est resté à 5 pts près dans les 5 dernières minutes." },
+      { src: "29-1.avif", portrait: true, tag: "ISO", legend: "Castle (confiait 'He's made that shot a thousand times') devra attendre. Pas ce soir." },
+      { src: "33.webp", tag: "CLUTCH", legend: "Brunson : 22 pts clutch sur la série (score à ±5 dans les 5 dernières min), record des Finals en 15 ans depuis Dirk Nowitzki en 2011." },
+      { src: "35.avif", tag: "STOP", legend: "La défense new-yorkaise fait le reste. San Antonio ne marque plus. Le buzzer retentit : 105-104 Knicks." },
+      { src: "3SMDDB5BLZEZXA6SLRIX2J7KHM.avif", tag: "GAME 2 · FINAL", legend: "13ème victoire consécutive, record absolu pour une équipe sur un seul run en playoffs. Les Knicks mènent 2-0 en Finales." }
+    ],
+    "Spurs_Game3": [
+      { src: "09a.webp", portrait: true, tag: "GAME 3 · MSG", legend: "Retour au Garden pour les premières Finales à domicile depuis 1999. Le président Donald Trump dans les tribunes." },
+      { src: "20-2.avif", tag: "COUP DE CHAUD", legend: "Wembanyama retrouve son meilleur niveau : 32 pts, 8 reb, 6 ast, 3 blk, 2 stl sur 11/18 au tir. Son meilleur match des Finals." },
+      { src: "20260608_SAS_RT_NBAFinals_GameThree_NYK_70.webp", tag: "MUR", legend: "Castle (23 pts) et Fox (big shots tardifs) complètent le travail de Wemby. Le MSG silencieux pour la première fois en 46 jours." },
+      { src: "33.webp", portrait: true, tag: "FATIGUE", legend: "Brunson : 32 pts, 5 reb, 5 ast, mais 5 balles perdues. Les Knicks, 47 pts en 2e mi-temps seulement, subissent la physicalité texane." },
+      { src: "téléchargement.jpeg", tag: "GAME 3 · FINAL", legend: "115-111 Spurs. La série de 13 victoires s'arrête. San Antonio reste en vie : 2-1. Le Garden avait perdu le fil." }
+    ],
+    "Spurs_Game4": [
+      { src: "00.webp", tag: "CAUCHEMAR", legend: "-27 à la mi-temps — la 3e plus large avance à la pause dans l'histoire des Finales NBA. Les Spurs semblent vers leur 1ère victoire au Garden." },
+      { src: "02-1.jpeg", portrait: true, tag: "DOUTE", legend: "San Antonio mène 76 pts en première mi-temps avant de n'en marquer que 30 en seconde. Le plus grand écart de l'ère shot clock." },
+      { src: "brunson_wemby.avif", tag: "REVOLTE", legend: "Brunson relance la machine : 36 pts au total, attaquant chaque mismatch disponible. Anunoby prend feu en parallèle." },
+      { src: "crowd.jpeg", tag: "SPARK", legend: "Jose Alvarado, natif de Brooklyn, entre et joue 9'40'' dans le 4e quart : 8 pts, 3 ast, 2 reb, +17 en sa présence." },
+      { src: "hart.webp", portrait: true, tag: "EN FEU", legend: "OG Anunoby : 33 pts, 7/9 à 3 pts, et le contre sur Fox à 15 secondes de la fin. Le match de sa vie." },
+      { src: "HKez5d1XMAEvo-k.jpeg", tag: "COMEBACK", legend: "Les Knicks remontaient 29 pts de retard. Jamais vu dans l'histoire des Finales NBA. Le record qui existait : 15 pts (Lakers 1966)." },
+      { src: "HKi4b22X0AAufVt.jpeg", tag: "FUSION", legend: "New York outscores San Antonio 58-30 en 2e mi-temps. Ratio impensable au regard de la première mi-temps des Spurs." },
+      { src: "HKi4b2oXQAAgOZR.jpeg", portrait: true, tag: "RÉSISTANCE", legend: "Brunson rate le 3 pts qui aurait pu gagner le match en régulation. Mais la balle reste dans les mains des Knicks..." },
+      { src: "HKibqj1XIAErodL.jpeg", tag: "STAT", legend: "Anunoby devient le 5e joueur depuis 1998 à réussir deux tentatives go-ahead dans les 5 dernières secondes d'un match de playoffs." },
+      { src: "HKj0RrGWAAAX-gB.jpeg", tag: "MONEY TIME", legend: "1.2 seconde au chrono. 106-106. Le Garden en apnée totale." },
+      { src: "HKu-P4IXwAACzpv.jpeg", portrait: true, tag: "ISO", legend: "OG ne rate pas le rendez-vous. Personne ne le box-out sur le rebond offensif. Il y va seul." },
+      { src: "HKUyP3OWAAE3aQ4.jpeg", tag: "CONTRE", legend: "'When the shot went up, I was free', dira OG. 'There was no one boxing me out. So I just went in there.'" },
+      { src: "HKVpy2YW8AESVrZ.jpeg", tag: "MIRACLE", legend: "OG Anunoby tip-in à 1.2 seconde. Le plus grand comeback de l'histoire des Finales NBA est signé New York Knicks." },
+      { src: "kat.jpg", portrait: true, tag: "BUZZER", legend: "107-106 Knicks. Madison Square Garden explose. Timothée Chalamet rejoue le geste d'OG dans les tribunes." },
+      { src: "kat_bis.jpeg", tag: "ÉMOTION", legend: "Towns et Anunoby s'effondrent dans les bras l'un de l'autre. Les larmes coulent librement dans les couloirs du Garden." },
+      { src: "og_33.jpg", tag: "LÉGENDE", legend: "Les Knicks rejoignent les 1975 Warriors : les deux seules équipes à avoir gagné plusieurs matchs d'une même Finale par un seul petit point." },
+      { src: "tipin.jpeg", tag: "GAME 4 · FINAL", legend: "3-1. Les Knicks sont à une victoire du titre. Les 38 équipes précédentes dans cette situation : 37 ont été sacrées. Les Warriors 2016 étant la seule exception." }
+    ],
+    "Spurs_Game5": [
+      { src: "20-3.webp", portrait: true, tag: "GAME 5 · BALLE DE MATCH", legend: "Retour à San Antonio. Les Knicks menés 16 pts dans le 1er quart, puis 15 au 3e, puis 10 dans le 4e. Mais Brunson refuse de perdre." },
+      { src: "31-1.avif", portrait: true, tag: "DUEL", legend: "13 pts de suite pour Brunson dans le 4e quart, dont le floater go-ahead à 65 secondes de la fin pour le 92-90. Son seul adversaire : le temps." },
+      { src: "33-2.jpeg", tag: "TENSION", legend: "Wembanyama : 19 pts, 14 reb, 5 blk. Harper : 25 pts. Castle : 1/10 au tir. Fox : 3/15. La jeunesse des Spurs craque au moment décisif." },
+      { src: "35-1.webp", tag: "MUR", legend: "Les Knicks tiennent San Antonio à 18 pts sur 7/22 au tir dans le 4e quart. La défense gagne le titre autant que Brunson." },
+      { src: "39-1.jpeg", portrait: true, tag: "LARRY O'BRIEN", legend: "53 ans d'attente. Depuis Willis Reed en 1973. Le trophée Larry O'Brien retourne à New York." },
+      { src: "42.jpeg", tag: "SUPER-HÉROS", legend: "Brunson : 45 pts (record des Knicks en Finales), 4/7 à 3 pts, 13/15 aux lancers. Fini à 14/27 au tir. Tout pour le titre." },
+      { src: "brunsons.jpeg", tag: "CHAMPIONS", legend: "'An absolute masterpiece with 45 points. He will be the king of New York for the rest of his life.' — Mike Breen, ESPN." },
+      { src: "HKv7Q0PbEAAVXMC.jpeg", portrait: true, tag: "ISOLATION", legend: "Brunson rejoint Michael Jordan (45 pts en 1993) parmi les seuls joueurs à avoir scoré autant sur un Game de clôture de Finales." },
+      { src: "HKv7xVNacAAxZFN.jpeg", tag: "GRINTA", legend: "Brunson, Bridges et Hart : les 'Nova Knicks' devenus premiers trios de coéquipiers à remporter ensemble le titre NCAA ET le titre NBA." },
+      { src: "HKvc0azXAAA_7qX.jpeg", tag: "DÉFENSE", legend: "Les Knicks ont remporté 4 victoires en ralliant depuis un déficit à deux chiffres. Jamais vu dans l'histoire d'une seule Finale." },
+      { src: "HKv_d8cXAAACT6A.jpeg", portrait: true, tag: "SOULAGEMENT", legend: "'I have no words. It's everything I ever dreamed of.' — Jalen Brunson, au micro, la voix brisée, au Frost Bank Center." },
+      { src: "HKwI0wOWMAAW9aA.jpeg", tag: "LARMES", legend: "Towns : 'I feel like the word hope has been gone from the New York Knicks name for a long time.' Le mur s'effondre." },
+      { src: "HKwId0nacAAjH_K.jpeg", tag: "CONSÉCRATION", legend: "94-90. Championnat. 8e saison consécutive avec un nouveau champion NBA. Cette fois, c'est New York." },
+      { src: "HKwPDSLbEAAAKLG.jpeg", portrait: true, tag: "CÉRÉMONIE", legend: "Brunson reçoit le trophée Bill Russell de MVP des Finales. 4 matchs à 30+ pts sur 5 games joués. Un monstre." },
+      { src: "HKwtWC8X0AAqWqj.jpeg", tag: "TROPHÉE", legend: "Le Larry O'Brien. 53 ans. La plus longue attente de l'histoire pour une franchise ayant déjà été sacrée dans la ligue." },
+      { src: "HKwVt_aW4AAdU5J.jpeg", tag: "FAMILLE", legend: "Brunson a remporté son 2e titre NCAA à San Antonio en 2018 avec Villanova. Le Texas lui offre maintenant son titre NBA." },
+      { src: "HKwX8EZbQAAMS52.jpeg", portrait: true, tag: "DYNASTIE", legend: "Les Knicks 2026 : champions avec le meilleur differential de l'histoire de la NBA sur 12 matchs de playoffs (+221)." },
+      { src: "stats_jalen.jpeg", tag: "MVP DES FINALES", legend: "45 pts (14/27, 4/7 à 3 pts, 13/15 aux LF), 3 reb, 3 ast, 2 stl en 41 minutes. Record des Knicks en Finales. Jalen Brunson, MVP." }
+    ],
+    "Vrac": [
+      { src: "HKwnXx4XAAA2YDy.jpeg", portrait: true, tag: "PARADE", legend: "Fifth Avenue, 17 juin 2026. Un million de New-Yorkais dans les rues pour fêter un titre qui a tardé 53 ans à revenir." },
+      { src: "HKwZQAgXIAANmMs.jpeg", tag: "ÉTERNELS", legend: "Les Knicks 2026 dans la légende. Premiers à remonter 29 pts en Finales. Premiers à gagner 4 fois depuis un déficit de 10+ pts dans une même série." }
+    ]
+  };
+
+  /* 2. DONNEES DES MATCHS (Structure allégée) */
+  const SERIES_DATA = [
+    {
+      id: 'hawks',
+      wm: 'R1', roundShort: '1er Tour', round: 'Premier Tour — Est',
+      opponent: 'Atlanta Hawks', result: 'KNX 4 – ATL 2',
+      accent: '#4FA8E0',
+      bg: 'linear-gradient(135deg,#0a1f38,#1a3a5c)',
+      games: [
+        { num: 1, won: true, score: 'KNICKS 113 – HAWKS 102', date: 'Samedi 18 avril 2026 · Madison Square Garden', summary: 'Ouverture convaincante au Garden. Brunson dirige l\'attaque (29 pts).', folder: 'Hawks_Game1' },
+        { num: 2, won: false, score: 'HAWKS 107 – KNICKS 106', date: 'Lundi 21 avril 2026 · Madison Square Garden', summary: 'Atlanta vole le match à Atlanta.', folder: 'Hawks_Game2' },
+        { num: 3, won: false, score: 'HAWKS 109 – KNICKS 108', date: 'Jeudi 24 avril 2026 · State Farm Arena', summary: 'Deuxième défaite consécutive.', folder: 'Hawks_Game3' },
+        { num: 4, won: true, score: 'KNICKS 114 – HAWKS 98', date: 'Samedi 25 avril 2026 · State Farm Arena', summary: 'KAT réalise le premier triple-double de sa carrière en playoffs.', folder: 'Hawks_Game4' },
+        { num: 5, won: true, score: 'KNICKS 126 – HAWKS 97', date: 'Mardi 28 avril 2026 · Madison Square Garden', summary: 'Brunson proche de son record personnel : 39 points en playoffs.', folder: 'Hawks_Game5' },
+        { num: 6, won: true, score: 'KNICKS 140 – HAWKS 89', date: 'Jeudi 30 avril 2026 · State Farm Arena', summary: '+51 à la mi-temps : record NBA absolu pour une marge à la pause.', folder: 'Hawks_Game6' }
+      ]
+    },
+    {
+      id: 'sixers',
+      wm: 'R2', roundShort: 'Demi-Finales', round: 'Demi-Finales de Conférence — Est',
+      opponent: 'Philadelphia 76ers', result: 'KNX 4 – PHI 0',
+      accent: '#F58426',
+      bg: 'linear-gradient(135deg,#1e0c04,#3c1808)',
+      games: [
+        { num: 1, won: true, score: 'KNICKS 137 – 76ERS 98', date: 'Lundi 5 mai 2026 · Madison Square Garden', summary: 'Le sweep commence avec fracas : +39 dès le Game 1.', folder: 'Philly_Game1' },
+        { num: 2, won: true, score: 'KNICKS 108 – 76ERS 102', date: 'Mercredi 7 mai 2026 · Madison Square Garden', summary: 'Brunson chasse James Harden sur chaque possession en clutch.', folder: 'Philly_Game2' },
+        { num: 3, won: true, score: 'KNICKS 108 – 76ERS 94', date: 'Vendredi 9 mai 2026 · Wells Fargo Center', summary: 'Déplacement à Philly et victoire sur le parquet adverse.', folder: 'Philly_Game3' },
+        { num: 4, won: true, score: 'KNICKS 144 – 76ERS 114', date: 'Dimanche 11 mai 2026 · Wells Fargo Center', summary: 'Sweep bouclé avec autorité : 144 points.', folder: 'Philly_Game4' }
+      ]
+    },
+    {
+      id: 'cavs',
+      wm: 'CF', roundShort: 'Finales Conf.', round: 'Finales de Conférence — Est',
+      opponent: 'Cleveland Cavaliers', result: 'KNX 4 – CLE 0',
+      accent: '#C9A84C',
+      bg: 'linear-gradient(135deg,#1a1200,#342600)',
+      games: [
+        { num: 1, won: true, score: 'KNICKS 121 – CAVALIERS 118 (OT)', date: 'Lundi 19 mai 2026 · Madison Square Garden', summary: 'Come-back en fin de réglementation : Brunson force les prolongations.', folder: 'Cavs_Game1' },
+        { num: 2, won: true, score: 'KNICKS 109 – CAVALIERS 91', date: 'Mercredi 21 mai 2026 · Madison Square Garden', summary: 'Les Cavs sous les 100 points.', folder: 'Cavs_Game2' },
+        { num: 3, won: true, score: 'KNICKS 113 – CAVALIERS 99', date: 'Samedi 24 mai 2026 · Rocket Mortgage FieldHouse', summary: 'Victoire à Cleveland.', folder: 'Cavs_Game3' },
+        { num: 4, won: true, score: 'KNICKS 130 – CAVALIERS 93', date: 'Lundi 26 mai 2026 · Rocket Mortgage FieldHouse', summary: 'Sweep des Finales de Conférence. +37.', folder: 'Cavs_Game4' }
+      ]
+    },
+    {
+      id: 'spurs',
+      wm: 'NBA', roundShort: 'Finales NBA', round: 'Finales NBA',
+      opponent: 'San Antonio Spurs', result: 'KNX 4 – SAS 1',
+      accent: '#FFD700',
+      bg: 'linear-gradient(135deg,#1a1600,#2c2800)',
+      games: [
+        { num: 1, won: true, score: 'KNICKS 105 – SPURS 95', date: 'Mercredi 3 juin 2026 · Frost Bank Center', summary: 'Rematch de 1999 — 27 ans de revanche.', folder: 'Spurs_Game1' },
+        { num: 2, won: true, score: 'KNICKS 105 – SPURS 104', date: 'Vendredi 5 juin 2026 · Frost Bank Center', summary: 'Un seul point. Brunson à 3.1 secondes de la fin.', folder: 'Spurs_Game2' },
+        { num: 3, won: false, score: 'SPURS 115 – KNICKS 111', date: 'Dimanche 8 juin 2026 · Madison Square Garden', summary: 'San Antonio réagit au Garden.', folder: 'Spurs_Game3' },
+        { num: 4, won: true, score: 'KNICKS 107 – SPURS 106', date: 'Mercredi 10 juin 2026 · Madison Square Garden', summary: 'Le plus grand retour de l\'histoire des Finales NBA.', folder: 'Spurs_Game4' },
+        { num: 5, won: true, score: 'KNICKS 94 – SPURS 90', date: 'Samedi 14 juin 2026 · Frost Bank Center', summary: 'Jalen Brunson : 45 points, record des Finales NBA pour les Knicks.', folder: 'Spurs_Game5' }
+      ]
+    }
+  ];
+
+  /* 3. GENERATION AUTOMATIQUE DES GALERIES */
+  const SERIES = SERIES_DATA.map(series => {
+    series.games.forEach(game => {
+      if (!game.photos) game.photos = [];
+
+      if (game.folder && AUTO_FILES[game.folder]) {
+        AUTO_FILES[game.folder].forEach((item, index) => {
+          game.photos.push({
+            id: `${series.id}-g${game.num}-${index}`,
+            src: `/photos/${game.folder}/${item.src}`,
+            bg: series.bg,
+            tag: item.tag || `GAME ${game.num}`,
+            legend: item.legend || '',
+            portrait: item.portrait || false
+          });
+        });
+      }
+
+      // On ajoute le dossier "Vrac" à la fin du Game 5 des Spurs pour la parade
+      if (series.id === 'spurs' && game.num === 5 && AUTO_FILES["Vrac"]) {
+        AUTO_FILES["Vrac"].forEach((item, index) => {
+          game.photos.push({
+            id: `spurs-vrac-${index}`,
+            src: `/photos/Vrac/${item.src}`,
+            bg: series.bg,
+            tag: item.tag,
+            legend: item.legend,
+            portrait: item.portrait || false
+          });
+        });
+      }
+    });
+    return series;
+  });
+
+  /* ── APP ──────────────────────────────────────────────────────────────── */
+  createApp({
+    setup() {
+      const activeSeriesId = ref('hawks');
+      const activeGame = reactive(
+              Object.fromEntries(SERIES.map(s => [s.id, s.games[0].num]))
+      );
+
+      const lb = reactive({ open: false, photo: null, series: null, game: null });
+
+      const currentIndex = computed(() => {
+        if (!lb.game || !lb.photo) return -1;
+        return lb.game.photos.findIndex(p => p.id === lb.photo.id);
+      });
+
+      const hasPrev = computed(() => currentIndex.value > 0);
+      const hasNext = computed(() => lb.game && currentIndex.value < lb.game.photos.length - 1);
+
+      function prevPhoto() {
+        if (hasPrev.value) lb.photo = lb.game.photos[currentIndex.value - 1];
+      }
+      function nextPhoto() {
+        if (hasNext.value) lb.photo = lb.game.photos[currentIndex.value + 1];
+      }
+
+      function openLb(photo, series, game) {
+        lb.photo = photo;
+        lb.series = series;
+        lb.game = game;
+        lb.open = true;
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLb() {
+        lb.open = false;
+        document.body.style.overflow = '';
+      }
+
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      function onTouchStart(e) {
+        touchStartX = e.changedTouches[0].screenX;
+      }
+
+      function onTouchEnd(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      }
+
+      function handleSwipe() {
+        const threshold = 50;
+        if (touchEndX < touchStartX - threshold) {
+          nextPhoto();
+        }
+        if (touchEndX > touchStartX + threshold) {
+          prevPhoto();
+        }
+      }
+
+      function goToSeries(id) {
+        const el = document.getElementById('s-' + id);
+        if (!el) return;
+        const nav = document.querySelector('.snav-wrap');
+        const offset = nav ? nav.offsetHeight + 16 : 80;
+        window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
+      }
+
+      function setGame(seriesId, gameNum) {
+        activeGame[seriesId] = gameNum;
+      }
+
+      let obs = null;
+      onMounted(() => {
+        obs = new IntersectionObserver(
+                entries => entries.forEach(e => { if (e.isIntersecting) activeSeriesId.value = e.target.id.replace('s-', ''); }),
+                { rootMargin: '-35% 0px -60% 0px' }
+        );
+        document.querySelectorAll('.series').forEach(el => obs.observe(el));
+
+        window.addEventListener('keydown', e => {
+          if (!lb.open) return;
+          if (e.key === 'Escape') closeLb();
+          if (e.key === 'ArrowLeft') prevPhoto();
+          if (e.key === 'ArrowRight') nextPhoto();
+        });
+      });
+
+      onUnmounted(() => { if (obs) obs.disconnect(); });
+
+      return {
+        SERIES, activeSeriesId, activeGame, lb,
+        goToSeries, setGame, openLb, closeLb,
+        hasPrev, hasNext, prevPhoto, nextPhoto,
+        onTouchStart, onTouchEnd
+      };
+    }
+  }).mount('#app');
+</script>
+</body>
+</html>
