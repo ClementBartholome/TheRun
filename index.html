@@ -603,7 +603,7 @@
         AUTO_FILES[game.folder].forEach((item, index) => {
           game.photos.push({
             id: `${series.id}-g${game.num}-${index}`,
-            src: `/photos/${game.folder}/${item.src}`,
+            src: `photos/${game.folder}/${item.src}`,
             bg: series.bg,
             tag: item.tag || `GAME ${game.num}`,
             legend: item.legend || '',
@@ -617,7 +617,7 @@
         AUTO_FILES["Vrac"].forEach((item, index) => {
           game.photos.push({
             id: `spurs-vrac-${index}`,
-            src: `/photos/Vrac/${item.src}`,
+            src: `photos/Vrac/${item.src}`,
             bg: series.bg,
             tag: item.tag,
             legend: item.legend,
